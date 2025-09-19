@@ -1,0 +1,50 @@
+:root {
+  --color-default-white: #ffffff;
+  --color-default-black: #000000;
+  --color-default-text: #1c1c1c;
+  --color-main-text: #1c1c1c48;
+  --color-default-bg: #e6e6e6;
+  --color-default-border: rgba(0, 0, 0, 0.2);
+
+  --shadow-default: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  background-color: var(--color-default-white);
+  color: var(--color-default-text);
+}
+
+#app {
+  display: grid;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+
