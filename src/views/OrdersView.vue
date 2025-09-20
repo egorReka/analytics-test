@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import HeaderContent from '@/components/HeaderContent.vue';
+import MainContent from '@/components/MainContent.vue';
 
 // import { onMounted } from 'vue';
 
@@ -24,7 +24,7 @@ import HeaderContent from '@/components/HeaderContent.vue';
 </script>
 
 <template>
-  <HeaderContent />
+  <MainContent />
 </template>
 
 <style scope></style>
