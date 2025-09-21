@@ -1,14 +1,27 @@
 <script setup lang="ts">
 import type { PaginationMeta } from '@/interfaces/common/pagination.interface';
+
 const { pagination } = defineProps<{ pagination: PaginationMeta }>();
+const emit = defineEmits<{ (e: 'pageChange', page: number): void }>();
+
+const handlePageClick = (link: { url: string | null, label: string, active: boolean }) => {
+  if (link.url) {
+    const url = new URL(link.url);
+    const page = url.searchParams.get('page');
+
+    if (page) {
+      emit('pageChange', parseInt(page));
+    }
+  }
+};
 </script>
 
 <template>
   <div class="pagination">
     <ul class="pagination__list">
       <li v-for="(link, index) in pagination.links" :key="index">
-        <a class="pagination__link" :class="pagination.current_page === index ? 'active' : ''"
-          :href="link.url ? link.url : '#'" v-html="link.label">
+        <a class="pagination__link" :class="{ 'active': link.active }" @click.prevent="handlePageClick(link)" href="#"
+          v-html="link.label">
         </a>
       </li>
     </ul>
@@ -39,9 +52,9 @@ const { pagination } = defineProps<{ pagination: PaginationMeta }>();
   min-width: 32px;
   height: 32px;
   padding: 0 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--color-default-border);
   border-radius: 4px;
-  background-color: #fff;
+  background-color: var(--color-default-white);
   text-decoration: none;
   text-wrap: nowrap;
   font-size: 14px;
@@ -51,7 +64,7 @@ const { pagination } = defineProps<{ pagination: PaginationMeta }>();
 
 .pagination__button:hover,
 .pagination__link:hover {
-  background-color: #f5f5f5;
+  background-color: var(--color-default-bg);
 }
 
 .pagination__link.active {

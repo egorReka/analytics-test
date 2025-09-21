@@ -7,15 +7,18 @@ import { ref } from "vue";
 export const useOrdersStore = defineStore('orders', () => {
   const orders = ref<Order[]>([]);
   const pagination = ref<PaginationMeta>();
+  const currentPage = ref<number>(1);
 
-  async function fetchOrders(dateFrom: string, dateTo: string) {
+  async function fetchOrders(dateFrom: string, dateTo: string, page: number = 1) {
+    currentPage.value = page;
+
     const { data } = await http.get<OrderResponse>(API_ENDPOINT.orders, {
       params: {
         dateFrom,
         dateTo,
-        page: 1,
+        page,
         key: API_KEY,
-        limit: 5,
+        limit: 10,
       }
     });
 
@@ -23,6 +26,6 @@ export const useOrdersStore = defineStore('orders', () => {
     pagination.value = data.meta
   }
 
-  return { orders, pagination, fetchOrders }
+  return { orders, pagination, currentPage, fetchOrders }
 })
 

@@ -1,44 +1,43 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useOrdersStore } from '@/stores/orders.store';
-import { Chart } from 'chart.js';
+import { ref } from 'vue'
+import { useOrdersStore } from '@/stores/orders.store'
+import { Chart } from 'chart.js'
 
-import HeaderContent from '@/components/HeaderContent.vue';
-import PaginationContent from '@/components/PaginationContent.vue';
-import type { Order } from '@/interfaces/order.interface';
-import { getArrRandomColor } from '@/utils';
+import HeaderContent from '@/components/HeaderContent.vue'
+import PaginationContent from '@/components/PaginationContent.vue'
+import type { Order } from '@/interfaces/order.interface'
 
-const storeOrders = useOrdersStore();
-const chartRef = ref<HTMLCanvasElement | null>(null);
-const date = ref<{ dateFrom: string, dateTo: string }>({
+const storeOrders = useOrdersStore()
+const chartRef = ref<HTMLCanvasElement | null>(null)
+const date = ref<{ dateFrom: string; dateTo: string }>({
   dateFrom: '',
   dateTo: '',
-});
-const chart = ref<Chart<'bar'> | null>(null);
+})
+const chart = ref<Chart<'bar'> | null>(null)
 
 function getWarehouseSales(orders: Order[]) {
-  const warehouseSales: Record<string, number> = {};
+  const warehouseSales: Record<string, number> = {}
 
-  orders.forEach(item => {
-    const price = parseFloat(item.total_price);
+  orders.forEach((item) => {
+    const price = parseFloat(item.total_price)
 
     if (warehouseSales[item.warehouse_name]) {
-      warehouseSales[item.warehouse_name] += price;
+      warehouseSales[item.warehouse_name] += price
     } else {
-      warehouseSales[item.warehouse_name] = price;
+      warehouseSales[item.warehouse_name] = price
     }
-  });
+  })
 
-  const labels = Object.keys(warehouseSales);
-  const data = Object.values(warehouseSales);
-  const length = Object.keys(warehouseSales).length;
+  const labels = Object.keys(warehouseSales)
+  const data = Object.values(warehouseSales)
+  const length = Object.keys(warehouseSales).length
 
-  return { labels, data, length };
+  return { labels, data, length }
 }
 
 function initChart() {
   if (chart.value) {
-    chart.value.destroy();
+    chart.value.destroy()
   }
 
   if (chartRef.value) {
@@ -46,33 +45,18 @@ function initChart() {
       type: 'bar',
       data: {
         labels: getWarehouseSales(storeOrders.orders).labels,
-        datasets: [{
-          label: 'Сумма продаж, ₽',
-          data: getWarehouseSales(storeOrders.orders).data,
-          backgroundColor: getArrRandomColor(getWarehouseSales(storeOrders.orders).length),
-          borderWidth: 1
-        }]
+        datasets: [
+          {
+            label: 'Сумма продаж, ₽',
+            data: getWarehouseSales(storeOrders.orders).data,
+            borderWidth: 1,
+          },
+        ],
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true,
-            title: {
-              display: true,
-              text: '₽'
-            }
-          },
-          x: {
-            title: {
-              display: true,
-              text: 'Склад'
-            }
-          }
-        }
-      }
-    });
+      },
+    })
   }
 }
 
@@ -80,6 +64,12 @@ async function onDateSubmit() {
   if (date.value.dateFrom && date.value.dateTo) {
     await storeOrders.fetchOrders(date.value.dateFrom, date.value.dateTo);
     await initChart();
+  }
+}
+
+async function handlePageChange(page: number) {
+  if (date.value.dateFrom && date.value.dateTo) {
+    await storeOrders.fetchOrders(date.value.dateFrom, date.value.dateTo, page);
   }
 }
 </script>
@@ -91,7 +81,7 @@ async function onDateSubmit() {
     <HeaderContent v-model:dateFrom="date.dateFrom" v-model:dateTo="date.dateTo" @submit="onDateSubmit" />
 
     <div class="chart" v-if="storeOrders.orders.length">
-      <canvas ref="chartRef" style="height: 300px;"></canvas>
+      <canvas ref="chartRef" style="height: 300px"></canvas>
     </div>
 
     <table class="table" v-if="storeOrders.orders.length">
@@ -115,7 +105,8 @@ async function onDateSubmit() {
       </tbody>
     </table>
 
-    <PaginationContent v-if="storeOrders.pagination" :pagination="storeOrders.pagination" />
+    <PaginationContent v-if="storeOrders.pagination" :pagination="storeOrders.pagination"
+      @pageChange="handlePageChange" />
   </section>
 </template>
 
