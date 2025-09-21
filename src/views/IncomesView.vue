@@ -81,8 +81,11 @@ onMounted(() => {
   <section class="content">
     <h2 class="visually-hidden">Incomes</h2>
 
-    <HeaderContent v-model:dateFrom="storeIncomes.dates.dateFrom" v-model:dateTo="storeIncomes.dates.dateTo"
-      @submit="onDateSubmit" />
+    <HeaderContent
+      v-model:dateFrom="storeIncomes.dates.dateFrom"
+      v-model:dateTo="storeIncomes.dates.dateTo"
+      @submit="onDateSubmit"
+    />
 
     <div class="chart" v-if="storeIncomes.incomes.length">
       <canvas ref="chartRef" style="height: 300px"></canvas>
@@ -107,8 +110,11 @@ onMounted(() => {
       </tbody>
     </table>
 
-    <PaginationContent v-if="storeIncomes.pagination" :pagination="storeIncomes.pagination"
-      @pageChange="handlePageChange" />
+    <PaginationContent
+      v-if="storeIncomes.pagination"
+      :pagination="storeIncomes.pagination"
+      @pageChange="handlePageChange"
+    />
   </section>
 </template>
 
