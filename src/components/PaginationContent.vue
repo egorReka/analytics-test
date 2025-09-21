@@ -1,14 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { PaginationMeta } from '@/interfaces/common/pagination.interface';
+const { pagination } = defineProps<{ pagination: PaginationMeta }>();
+</script>
 
 <template>
   <div class="pagination">
-    <button class="pagination__button" type="button">&lt;</button>
     <ul class="pagination__list">
-      <li><a class="pagination__link active" href="">1</a></li>
-      <li><a class="pagination__link" href="">2</a></li>
-      <li><a class="pagination__link" href="">3</a></li>
+      <li v-for="(link, index) in pagination.links" :key="index">
+        <a class="pagination__link" :class="pagination.current_page === index ? 'active' : ''"
+          :href="link.url ? link.url : '#'" v-html="link.label">
+        </a>
+      </li>
     </ul>
-    <button class="pagination__button" type="button">&gt;</button>
   </div>
 </template>
 
@@ -39,8 +42,8 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: #fff;
-  color: #333;
   text-decoration: none;
+  text-wrap: nowrap;
   font-size: 14px;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s;

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import MainContent from '@/components/MainContent.vue';
+import ChartContent from '@/components/ChartContent.vue';
 
 </script>
 
 <template>
-  <MainContent />
+  <!-- <MainContent /> -->
+  <ChartContent />
 </template>
 
 <style scope></style>

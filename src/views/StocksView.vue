@@ -4,6 +4,6 @@ import MainContent from '@/components/MainContent.vue';
 </script>
 
 <template>
-  <MainContent />
+  <!-- <MainContent /> -->
 </template>
 <style scope></style>

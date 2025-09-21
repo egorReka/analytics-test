@@ -5,7 +5,7 @@ import MainContent from '@/components/MainContent.vue';
 
 
 <template>
-  <MainContent />
+  <!-- <MainContent /> -->
 </template>
 
 <style scope></style>
