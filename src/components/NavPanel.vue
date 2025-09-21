@@ -40,7 +40,9 @@
   text-decoration: none;
   color: var(--color-main-text);
   transform-origin: left;
-  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition:
+    color 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
 }
 
 .nav__link:hover,

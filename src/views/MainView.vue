@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import NavPanel from '@/components/NavPanel.vue';
-
+import NavPanel from '@/components/NavPanel.vue'
 </script>
 
 <template>
   <div class="app">
     <div class="app__wrapper">
       <main class="app__main">
-
         <aside class="sidebar">
           <h1 class="sidebar__title">WB Analytics</h1>
 

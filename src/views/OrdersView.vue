@@ -3,6 +3,7 @@
 // обьеденить в один компонет, убрать дублирование кода, узнать как типизировать <Order | Income | Sales | Stoks>
 // Chart вынести в отдельный компонет, заменить на vue-chartjs, пренести в стор
 // пременные в стор занести в {}
+// обработать ошибки
 
 import { onMounted, ref } from 'vue'
 import { useOrdersStore } from '@/stores/orders.store'
@@ -14,18 +15,18 @@ import type { Order } from '@/interfaces/order.interface'
 
 const storeOrders = useOrdersStore()
 const chartRef = ref<HTMLCanvasElement | null>(null)
-const chart = ref<Chart<'bar'> | null>(null);
+const chart = ref<Chart<'bar'> | null>(null)
 
 function getWarehouseSales(orders: Order[]) {
-  const warehouseSales: Record<string, number> = {};
+  const warehouseSales: Record<string, number> = {}
 
   orders.forEach((item) => {
-    const price = parseFloat(item.total_price);
+    const price = parseFloat(item.total_price)
 
     if (warehouseSales[item.warehouse_name]) {
-      warehouseSales[item.warehouse_name] += price;
+      warehouseSales[item.warehouse_name] += price
     } else {
-      warehouseSales[item.warehouse_name] = price;
+      warehouseSales[item.warehouse_name] = price
     }
   })
 
@@ -38,7 +39,7 @@ function getWarehouseSales(orders: Order[]) {
 
 function initChart() {
   if (chart.value) {
-    chart.value.destroy();
+    chart.value.destroy()
   }
 
   if (chartRef.value) {
@@ -64,22 +65,22 @@ function initChart() {
 
 async function onDateSubmit() {
   if (storeOrders.dates.dateFrom && storeOrders.dates.dateTo) {
-    await storeOrders.fetchOrders(storeOrders.dates.dateFrom, storeOrders.dates.dateTo);
-    initChart();
+    await storeOrders.fetchOrders(storeOrders.dates.dateFrom, storeOrders.dates.dateTo)
+    initChart()
   }
 }
 
 async function handlePageChange(page: number) {
   if (storeOrders.dates.dateFrom && storeOrders.dates.dateTo) {
-    await storeOrders.fetchOrders(storeOrders.dates.dateFrom, storeOrders.dates.dateTo, page);
+    await storeOrders.fetchOrders(storeOrders.dates.dateFrom, storeOrders.dates.dateTo, page)
   }
 }
 
 onMounted(() => {
   if (storeOrders.dates.dateFrom && storeOrders.dates.dateTo) {
-    initChart();
+    initChart()
   }
-});
+})
 </script>
 
 <template>

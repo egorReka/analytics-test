@@ -1,32 +1,31 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
-const dateFrom = defineModel<string>('dateFrom');
-const dateTo = defineModel<string>('dateTo');
+const dateFrom = defineModel<string>('dateFrom')
+const dateTo = defineModel<string>('dateTo')
 
-const today = new Date().toISOString().split('T')[0];
+const today = new Date().toISOString().split('T')[0]
 
 const minDateTo = computed(() => {
   if (!dateFrom.value) return ''
 
-  const date = new Date(dateFrom.value);
-  date.setDate(date.getDate() + 1);
+  const date = new Date(dateFrom.value)
+  date.setDate(date.getDate() + 1)
 
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split('T')[0]
 })
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit'])
 
 function onSubmit(evt: Event) {
-  evt.preventDefault();
-  emit('submit');
+  evt.preventDefault()
+  emit('submit')
 }
 </script>
 
 <template>
   <header class="header">
     <form class="header__filters" action="" method="GET" @submit="onSubmit">
-
       <div class="header__filters-wrapper">
         <div class="header__filter">
           <label class="visually-hidden" for="dateFrom">Date from</label>
@@ -34,7 +33,14 @@ function onSubmit(evt: Event) {
         </div>
         <div class="header__filter">
           <label class="visually-hidden" for="dateTo">Date to</label>
-          <input class="date-input" id="dateTo" type="date" :min="minDateTo" :max="today" v-model="dateTo" />
+          <input
+            class="date-input"
+            id="dateTo"
+            type="date"
+            :min="minDateTo"
+            :max="today"
+            v-model="dateTo"
+          />
         </div>
       </div>
 
@@ -86,7 +92,9 @@ function onSubmit(evt: Event) {
   font-size: 14px;
   font-family: inherit;
   background-color: var(--color-default-white);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .date-input:focus {

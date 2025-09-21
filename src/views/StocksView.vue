@@ -1,42 +1,42 @@
-<script setup lang="ts">;
-import { onMounted, ref } from 'vue';
-import { Chart } from 'chart.js';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Chart } from 'chart.js'
 
-import PaginationContent from '@/components/PaginationContent.vue';
-import { useStockStore } from '@/stores/stocks.store';
-import type { Stock } from '@/interfaces/stock.interface';
+import PaginationContent from '@/components/PaginationContent.vue'
+import { useStockStore } from '@/stores/stocks.store'
+import type { Stock } from '@/interfaces/stock.interface'
 
-const storeStocks = useStockStore();
-const chartRef = ref<HTMLCanvasElement | null>(null);
-const chart = ref<Chart<'bar'> | null>(null);
+const storeStocks = useStockStore()
+const chartRef = ref<HTMLCanvasElement | null>(null)
+const chart = ref<Chart<'bar'> | null>(null)
 
 function getWarehouseSales(stocks: Stock[]) {
-  const warehouseSales: Record<string, number> = {};
+  const warehouseSales: Record<string, number> = {}
 
   stocks.forEach((item) => {
     if (item.price === null) {
-      return;
+      return
     }
 
-    const price = parseFloat(item.price);
+    const price = parseFloat(item.price)
 
     if (warehouseSales[item.warehouse_name]) {
-      warehouseSales[item.warehouse_name] += price;
+      warehouseSales[item.warehouse_name] += price
     } else {
-      warehouseSales[item.warehouse_name] = price;
+      warehouseSales[item.warehouse_name] = price
     }
   })
 
-  const labels = Object.keys(warehouseSales);
-  const data = Object.values(warehouseSales);
-  const length = Object.keys(warehouseSales).length;
+  const labels = Object.keys(warehouseSales)
+  const data = Object.values(warehouseSales)
+  const length = Object.keys(warehouseSales).length
 
-  return { labels, data, length };
+  return { labels, data, length }
 }
 
 function initChart() {
   if (chart.value) {
-    chart.value.destroy();
+    chart.value.destroy()
   }
 
   if (chartRef.value) {
@@ -61,18 +61,18 @@ function initChart() {
 }
 
 async function handlePageChange(page: number) {
-  await storeStocks.fetchStocks(page);
+  await storeStocks.fetchStocks(page)
 }
 
 onMounted(async () => {
   if (storeStocks.stocks.length) {
-    initChart();
+    initChart()
 
-    return;
+    return
   }
 
-  await storeStocks.fetchStocks();
-  initChart();
+  await storeStocks.fetchStocks()
+  initChart()
 })
 </script>
 
@@ -103,8 +103,11 @@ onMounted(async () => {
       </tbody>
     </table>
 
-    <PaginationContent v-if="storeStocks.pagination" :pagination="storeStocks.pagination"
-      @pageChange="handlePageChange" />
+    <PaginationContent
+      v-if="storeStocks.pagination"
+      :pagination="storeStocks.pagination"
+      @pageChange="handlePageChange"
+    />
   </section>
 </template>
 

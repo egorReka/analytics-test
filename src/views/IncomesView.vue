@@ -1,39 +1,39 @@
-<script setup lang="ts">;
-import { onMounted, ref } from 'vue';
-import { Chart } from 'chart.js';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Chart } from 'chart.js'
 
-import HeaderContent from '@/components/HeaderContent.vue';
-import PaginationContent from '@/components/PaginationContent.vue';
-import { useIncomesStore } from '@/stores/incomes.store';
-import type { Income } from '@/interfaces/income.interface';
+import HeaderContent from '@/components/HeaderContent.vue'
+import PaginationContent from '@/components/PaginationContent.vue'
+import { useIncomesStore } from '@/stores/incomes.store'
+import type { Income } from '@/interfaces/income.interface'
 
-const storeIncomes = useIncomesStore();
-const chartRef = ref<HTMLCanvasElement | null>(null);
-const chart = ref<Chart<'bar'> | null>(null);
+const storeIncomes = useIncomesStore()
+const chartRef = ref<HTMLCanvasElement | null>(null)
+const chart = ref<Chart<'bar'> | null>(null)
 
 function getWarehouseSales(incomes: Income[]) {
-  const warehouseSales: Record<string, number> = {};
+  const warehouseSales: Record<string, number> = {}
 
   incomes.forEach((item) => {
-    const quantity = item.quantity;
+    const quantity = item.quantity
 
     if (warehouseSales[item.warehouse_name]) {
-      warehouseSales[item.warehouse_name] += quantity;
+      warehouseSales[item.warehouse_name] += quantity
     } else {
-      warehouseSales[item.warehouse_name] = quantity;
+      warehouseSales[item.warehouse_name] = quantity
     }
   })
 
-  const labels = Object.keys(warehouseSales);
-  const data = Object.values(warehouseSales);
-  const length = Object.keys(warehouseSales).length;
+  const labels = Object.keys(warehouseSales)
+  const data = Object.values(warehouseSales)
+  const length = Object.keys(warehouseSales).length
 
-  return { labels, data, length };
+  return { labels, data, length }
 }
 
 function initChart() {
   if (chart.value) {
-    chart.value.destroy();
+    chart.value.destroy()
   }
 
   if (chartRef.value) {
@@ -59,20 +59,20 @@ function initChart() {
 
 async function onDateSubmit() {
   if (storeIncomes.dates.dateFrom && storeIncomes.dates.dateTo) {
-    await storeIncomes.fetchIncomes(storeIncomes.dates.dateFrom, storeIncomes.dates.dateTo);
-    await initChart();
+    await storeIncomes.fetchIncomes(storeIncomes.dates.dateFrom, storeIncomes.dates.dateTo)
+    await initChart()
   }
 }
 
 async function handlePageChange(page: number) {
   if (storeIncomes.dates.dateFrom && storeIncomes.dates.dateTo) {
-    await storeIncomes.fetchIncomes(storeIncomes.dates.dateFrom, storeIncomes.dates.dateTo, page);
+    await storeIncomes.fetchIncomes(storeIncomes.dates.dateFrom, storeIncomes.dates.dateTo, page)
   }
 }
 
 onMounted(() => {
   if (storeIncomes.dates.dateFrom && storeIncomes.dates.dateTo) {
-    initChart();
+    initChart()
   }
 })
 </script>
@@ -81,8 +81,11 @@ onMounted(() => {
   <section class="content">
     <h2 class="visually-hidden">Incomes</h2>
 
-    <HeaderContent v-model:dateFrom="storeIncomes.dates.dateFrom" v-model:dateTo="storeIncomes.dates.dateTo"
-      @submit="onDateSubmit" />
+    <HeaderContent
+      v-model:dateFrom="storeIncomes.dates.dateFrom"
+      v-model:dateTo="storeIncomes.dates.dateTo"
+      @submit="onDateSubmit"
+    />
 
     <div class="chart" v-if="storeIncomes.incomes.length">
       <canvas ref="chartRef" style="height: 300px"></canvas>
@@ -107,8 +110,11 @@ onMounted(() => {
       </tbody>
     </table>
 
-    <PaginationContent v-if="storeIncomes.pagination" :pagination="storeIncomes.pagination"
-      @pageChange="handlePageChange" />
+    <PaginationContent
+      v-if="storeIncomes.pagination"
+      :pagination="storeIncomes.pagination"
+      @pageChange="handlePageChange"
+    />
   </section>
 </template>
 

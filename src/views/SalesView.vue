@@ -1,21 +1,21 @@
-<script setup lang="ts">;
-import { onMounted, ref } from 'vue';
-import { Chart } from 'chart.js';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Chart } from 'chart.js'
 
-import HeaderContent from '@/components/HeaderContent.vue';
-import PaginationContent from '@/components/PaginationContent.vue';
-import type { Sale } from '@/interfaces/sale.interface';
-import { useSalesStore } from '@/stores/sales.store';
+import HeaderContent from '@/components/HeaderContent.vue'
+import PaginationContent from '@/components/PaginationContent.vue'
+import type { Sale } from '@/interfaces/sale.interface'
+import { useSalesStore } from '@/stores/sales.store'
 
-const storeSales = useSalesStore();
-const chartRef = ref<HTMLCanvasElement | null>(null);
-const chart = ref<Chart<'bar'> | null>(null);
+const storeSales = useSalesStore()
+const chartRef = ref<HTMLCanvasElement | null>(null)
+const chart = ref<Chart<'bar'> | null>(null)
 
 function getWarehouseSales(sales: Sale[]) {
-  const warehouseSales: Record<string, number> = {};
+  const warehouseSales: Record<string, number> = {}
 
   sales.forEach((item) => {
-    const price = parseFloat(item.total_price);
+    const price = parseFloat(item.total_price)
 
     if (warehouseSales[item.warehouse_name]) {
       warehouseSales[item.warehouse_name] += price;
@@ -24,16 +24,16 @@ function getWarehouseSales(sales: Sale[]) {
     }
   })
 
-  const labels = Object.keys(warehouseSales);
-  const data = Object.values(warehouseSales);
-  const length = Object.keys(warehouseSales).length;
+  const labels = Object.keys(warehouseSales)
+  const data = Object.values(warehouseSales)
+  const length = Object.keys(warehouseSales).length
 
-  return { labels, data, length };
+  return { labels, data, length }
 }
 
 function initChart() {
   if (chart.value) {
-    chart.value.destroy();
+    chart.value.destroy()
   }
 
   if (chartRef.value) {
@@ -59,22 +59,22 @@ function initChart() {
 
 async function onDateSubmit() {
   if (storeSales.dates.dateFrom && storeSales.dates.dateTo) {
-    await storeSales.fetchSales(storeSales.dates.dateFrom, storeSales.dates.dateTo);
-    await initChart();
+    await storeSales.fetchSales(storeSales.dates.dateFrom, storeSales.dates.dateTo)
+    await initChart()
   }
 }
 
 async function handlePageChange(page: number) {
   if (storeSales.dates.dateFrom && storeSales.dates.dateTo) {
-    await storeSales.fetchSales(storeSales.dates.dateFrom, storeSales.dates.dateTo, page);
+    await storeSales.fetchSales(storeSales.dates.dateFrom, storeSales.dates.dateTo, page)
   }
 }
 
 onMounted(() => {
   if (storeSales.dates.dateFrom && storeSales.dates.dateTo) {
-    initChart();
+    initChart()
   }
-});
+})
 </script>
 
 <template>

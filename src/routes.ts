@@ -27,7 +27,7 @@ export const router = createRouter({
           component: () => import('./views/StocksView.vue'),
           name: 'stocks',
         },
-      ]
+      ],
     },
   ],
 })

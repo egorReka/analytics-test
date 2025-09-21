@@ -1,24 +1,24 @@
-import type { PaginatedResponse } from './common/pagination.interface';
+import type { PaginatedResponse } from './common/pagination.interface'
 
 export interface Order {
-  g_number: string;
-  date: string;
-  last_change_date: string;
-  supplier_article: string;
-  tech_size: string;
-  barcode: number;
-  total_price: string;
-  discount_percent: number;
-  warehouse_name: string;
-  oblast: string;
-  income_id: number;
-  odid: string;
-  nm_id: number;
-  subject: string;
-  category: string;
-  brand: string;
-  is_cancel: boolean;
-  cancel_dt: string | null;
+  g_number: string
+  date: string
+  last_change_date: string
+  supplier_article: string
+  tech_size: string
+  barcode: number
+  total_price: string
+  discount_percent: number
+  warehouse_name: string
+  oblast: string
+  income_id: number
+  odid: string
+  nm_id: number
+  subject: string
+  category: string
+  brand: string
+  is_cancel: boolean
+  cancel_dt: string | null
 }
 
-export type OrderResponse = PaginatedResponse<Order>;
+export type OrderResponse = PaginatedResponse<Order>
