@@ -38,6 +38,7 @@ import NavPanel from '@/components/NavPanel.vue';
   display: grid;
   grid-template-columns: auto 1fr;
   height: 100%;
+  min-height: 600px;
 }
 
 .sidebar {

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+// TODO Провести рефакторинг
+// обьеденить в один компонет, убрать дублирование кода, узнать как типизировать <Order | Income | Sales | Stoks>
+// Chart вынести в отдельный компонет, заменить на vue-chartjs, пренести в стор
+// пременные в стор занести в {}
+
+import { onMounted, ref } from 'vue'
 import { useOrdersStore } from '@/stores/orders.store'
 import { Chart } from 'chart.js'
 
@@ -9,22 +14,18 @@ import type { Order } from '@/interfaces/order.interface'
 
 const storeOrders = useOrdersStore()
 const chartRef = ref<HTMLCanvasElement | null>(null)
-const date = ref<{ dateFrom: string; dateTo: string }>({
-  dateFrom: '',
-  dateTo: '',
-})
-const chart = ref<Chart<'bar'> | null>(null)
+const chart = ref<Chart<'bar'> | null>(null);
 
 function getWarehouseSales(orders: Order[]) {
-  const warehouseSales: Record<string, number> = {}
+  const warehouseSales: Record<string, number> = {};
 
   orders.forEach((item) => {
-    const price = parseFloat(item.total_price)
+    const price = parseFloat(item.total_price);
 
     if (warehouseSales[item.warehouse_name]) {
-      warehouseSales[item.warehouse_name] += price
+      warehouseSales[item.warehouse_name] += price;
     } else {
-      warehouseSales[item.warehouse_name] = price
+      warehouseSales[item.warehouse_name] = price;
     }
   })
 
@@ -37,7 +38,7 @@ function getWarehouseSales(orders: Order[]) {
 
 function initChart() {
   if (chart.value) {
-    chart.value.destroy()
+    chart.value.destroy();
   }
 
   if (chartRef.value) {
@@ -55,30 +56,38 @@ function initChart() {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
       },
     })
   }
 }
 
 async function onDateSubmit() {
-  if (date.value.dateFrom && date.value.dateTo) {
-    await storeOrders.fetchOrders(date.value.dateFrom, date.value.dateTo);
-    await initChart();
+  if (storeOrders.dates.dateFrom && storeOrders.dates.dateTo) {
+    await storeOrders.fetchOrders(storeOrders.dates.dateFrom, storeOrders.dates.dateTo);
+    initChart();
   }
 }
 
 async function handlePageChange(page: number) {
-  if (date.value.dateFrom && date.value.dateTo) {
-    await storeOrders.fetchOrders(date.value.dateFrom, date.value.dateTo, page);
+  if (storeOrders.dates.dateFrom && storeOrders.dates.dateTo) {
+    await storeOrders.fetchOrders(storeOrders.dates.dateFrom, storeOrders.dates.dateTo, page);
   }
 }
+
+onMounted(() => {
+  if (storeOrders.dates.dateFrom && storeOrders.dates.dateTo) {
+    initChart();
+  }
+});
 </script>
 
 <template>
   <section class="content">
     <h2 class="visually-hidden">Orders</h2>
 
-    <HeaderContent v-model:dateFrom="date.dateFrom" v-model:dateTo="date.dateTo" @submit="onDateSubmit" />
+    <HeaderContent v-model:dateFrom="storeOrders.dates.dateFrom" v-model:dateTo="storeOrders.dates.dateTo"
+      @submit="onDateSubmit" />
 
     <div class="chart" v-if="storeOrders.orders.length">
       <canvas ref="chartRef" style="height: 300px"></canvas>
@@ -114,6 +123,7 @@ async function handlePageChange(page: number) {
 .content {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 30px;
   padding: 40px;
 }

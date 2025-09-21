@@ -8,6 +8,10 @@ export const useOrdersStore = defineStore('orders', () => {
   const orders = ref<Order[]>([]);
   const pagination = ref<PaginationMeta>();
   const currentPage = ref<number>(1);
+  const dates = ref<{ dateFrom: string; dateTo: string }>({
+    dateFrom: '',
+    dateTo: '',
+  });
 
   async function fetchOrders(dateFrom: string, dateTo: string, page: number = 1) {
     currentPage.value = page;
@@ -26,6 +30,6 @@ export const useOrdersStore = defineStore('orders', () => {
     pagination.value = data.meta
   }
 
-  return { orders, pagination, currentPage, fetchOrders }
+  return { orders, pagination, currentPage, dates, fetchOrders }
 })
 
