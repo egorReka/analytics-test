@@ -10,6 +10,6 @@ export const API_ENDPOINT = {
 export const API_KEY = 'E6kUTYrYwZq2tN4QEtyzsbEBk3ie'
 
 export const http = axios.create({
-  baseURL: '/api', // CROS proxy http://109.73.206.144/api
+  baseURL: 'http://109.73.206.144/api',
   timeout: 10000,
 })
