@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { API_ENDPOINT, API_KEY, http } from '@/api'
 import type { PaginationMeta } from '@/interfaces/common/pagination.interface'
 import type { Sale, SaleResponse } from '@/interfaces/sale.interface'
@@ -16,18 +17,28 @@ export const useSalesStore = defineStore('sales', () => {
   async function fetchSales(dateFrom: string, dateTo: string, page: number = 1) {
     currentPage.value = page
 
-    const { data } = await http.get<SaleResponse>(API_ENDPOINT.sales, {
-      params: {
-        dateFrom,
-        dateTo,
-        page,
-        key: API_KEY,
-        limit: 10,
-      },
-    })
+    try {
 
-    sales.value = data.data
-    pagination.value = data.meta
+      const { data } = await http.get<SaleResponse>(API_ENDPOINT.sales, {
+        params: {
+          dateFrom,
+          dateTo,
+          page,
+          key: API_KEY,
+          limit: 10,
+        },
+      })
+
+      sales.value = data.data
+      pagination.value = data.meta
+
+    } catch(error) {
+      if (axios.isAxiosError(error)) {
+        if (error.message.includes("Network Error")) {
+          alert('Не удалось загрузить данные с сервера. Возможные причины: Mixed Content или CORS.');
+        }
+      }
+    }
   }
 
   return { sales, pagination, currentPage, dates, fetchSales }

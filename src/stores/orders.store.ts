@@ -1,8 +1,10 @@
+import axios from 'axios';
 import { API_ENDPOINT, API_KEY, http } from '@/api'
 import type { PaginationMeta } from '@/interfaces/common/pagination.interface'
 import type { Order, OrderResponse } from '@/interfaces/order.interface'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+
 
 export const useOrdersStore = defineStore('orders', () => {
   const orders = ref<Order[]>([])
@@ -16,19 +18,28 @@ export const useOrdersStore = defineStore('orders', () => {
   async function fetchOrders(dateFrom: string, dateTo: string, page: number = 1) {
     currentPage.value = page
 
-    const { data } = await http.get<OrderResponse>(API_ENDPOINT.orders, {
-      params: {
-        dateFrom,
-        dateTo,
-        page,
-        key: API_KEY,
-        limit: 10,
-      },
-    })
+    try {
+      const { data } = await http.get<OrderResponse>(API_ENDPOINT.orders, {
+        params: {
+          dateFrom,
+          dateTo,
+          page,
+          key: API_KEY,
+          limit: 10,
+        },
+      })
 
-    orders.value = data.data
-    pagination.value = data.meta
+      orders.value = data.data;
+      pagination.value = data.meta;
+
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.message.includes("Network Error")) {
+          alert('Не удалось загрузить данные с сервера. Возможные причины: Mixed Content или CORS.');
+        }
+      }
+    }
   }
 
-  return { orders, pagination, currentPage, dates, fetchOrders }
+  return { orders, pagination, currentPage, dates, fetchOrders };
 })
