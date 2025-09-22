@@ -1,39 +1,37 @@
-# wb-analytics
+![](https://img.shields.io/badge/Vue.js-3.5.18-green?logo=vue.js&logoColor=white)
+![](https://img.shields.io/badge/Vue_Router-4.5.1-red?logo=vue.js&logoColor=white)
+![](https://img.shields.io/badge/Pinia-3.0.3-yellow?logo=pinia&logoColor=white)
+![](https://img.shields.io/badge/TypeScript-5.8.0-blue?logo=typescript&logoColor=white)
+![](https://img.shields.io/badge/Vite-7.0.6-purple?logo=vite&logoColor=white)
+![](https://img.shields.io/badge/Axios-1.12.2-5A29E4?logo=axios&logoColor=white)
+![](https://img.shields.io/badge/Chart.js-4.5.0-orange?logo=chartdotjs&logoColor=white)
+![](https://img.shields.io/badge/Vue_Chart.js-5.3.2-lightgrey?logo=chartdotjs&logoColor=white)
+![](https://img.shields.io/badge/ESLint-9.31.0-blue?logo=eslint&logoColor=white)
+![](https://img.shields.io/badge/Prettier-3.6.2-pink?logo=prettier&logoColor=white)
 
-This template should help get you started developing with Vue 3 in Vite.
 
-## Recommended IDE Setup
+# Интерфейс аналитики WB
+Интерфейс позволяет просматривать и анализировать данные, полученные из API, по четырём разделам: incomes, orders, sales и stocks. Данные загружаются за указанные даты и отображаются в виде таблиц с фильтрацией и постраничной пагинацией. Для наглядности ключевые показатели визуализируются в интерактивных графиках.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+![alt text](image.png)
 
-## Type Support for `.vue` Imports in TS
+> ### ⚠️Ограничения API
+> - API доступен только по **HTTP**, хостинги работает через **HTTPS** → возникает ошибка **Mixed Content**. 
+> - На сервере не открыт **CORS**, прямые запросы невозможны.
+>
+>Для запуска локально: указать в api.ts → baseURL: '/api' в vite.config.ts настроен proxy который перенаправит запросы на http://109.73.206.144:6969
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Начало работы
 
-## Customize configuration
+1. Установите `node.js` Поддерживаемая версия сборки `20+`
+2. Установите зависимости с помощью
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```shell
+npm ci
 ```
 
-### Compile and Hot-Reload for Development
+3. Запустите проект с помощью
 
-```sh
+```shell
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
